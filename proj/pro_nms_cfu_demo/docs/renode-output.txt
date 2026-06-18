@@ -1,0 +1,33 @@
+Command:
+
+cd /home/nmsglobal/DEVEL/CFU-Playground/proj/pro_nms_cfu_demo
+PATH=/home/nmsglobal/DEVEL/CFU-Playground/.venv-renode/bin:/usr/bin:/bin:/usr/sbin:/sbin make renode-test
+
+Renode Robot result:
+
++++++ Starting test 'digilent_arty.Should Run PRO CFU INT8 DOT4 Demo'
++++++ Finished test 'digilent_arty.Should Run PRO CFU INT8 DOT4 Demo' in 5.40 seconds with status OK
+Tests finished successfully :)
+
+UART output captured from RISC-V firmware:
+
+PRO CFU DEMO - RISC-V + CFU INT8 DOT4
+
+CPU-only dot product
+result = -595
+cycles = 2824
+
+CFU custom instruction dot product
+result = -595
+cycles = 1554
+
+VERIFY = OK
+SPEEDUP = 1.81 x
+
+CFU op mapping:
+funct7=1 reset accumulator
+funct7=0 dot4 accumulate: int8x4 MAC
+funct7=2 read accumulator
+
+Running on:
+CFU Playground / LiteX / VexRiscV / Renode

@@ -1,0 +1,5 @@
+robotframework==6.0.2
+requests==2.27.1
+psutil==5.9.3
+PyYAML==6.0.2
+construct==2.10.68
