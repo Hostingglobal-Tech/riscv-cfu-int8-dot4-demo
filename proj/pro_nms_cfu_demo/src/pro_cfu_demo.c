@@ -18,15 +18,8 @@
 
 #define DOT_LEN 256
 
-static int8_t input_data[DOT_LEN];
-static int8_t weight_data[DOT_LEN];
-
-static uint32_t pack4_i8(int8_t x0, int8_t x1, int8_t x2, int8_t x3) {
-  return ((uint32_t)(uint8_t)x0) |
-         ((uint32_t)(uint8_t)x1 << 8) |
-         ((uint32_t)(uint8_t)x2 << 16) |
-         ((uint32_t)(uint8_t)x3 << 24);
-}
+static int8_t input_data[DOT_LEN] __attribute__((aligned(4)));
+static int8_t weight_data[DOT_LEN] __attribute__((aligned(4)));
 
 static void init_vectors(void) {
   for (int i = 0; i < DOT_LEN; ++i) {
@@ -48,12 +41,10 @@ static int32_t dot_cfu(const volatile int8_t* input,
                        const volatile int8_t* weight, int len) {
   cfu_op0(1, 0, 0);
 
-  for (int i = 0; i < len; i += 4) {
-    uint32_t packed_input =
-        pack4_i8(input[i], input[i + 1], input[i + 2], input[i + 3]);
-    uint32_t packed_weight =
-        pack4_i8(weight[i], weight[i + 1], weight[i + 2], weight[i + 3]);
-    cfu_op0(0, packed_input, packed_weight);
+  const volatile uint32_t* in32 = (const volatile uint32_t*)(const volatile void*)input;
+  const volatile uint32_t* wt32 = (const volatile uint32_t*)(const volatile void*)weight;
+  for (int i = 0; i < len / 4; ++i) {
+    cfu_op0(0, in32[i], wt32[i]);
   }
 
   return (int32_t)cfu_op0(2, 0, 0);

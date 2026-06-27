@@ -95,6 +95,7 @@ SHARED_FLAGS := \
 
 CFLAGS  := \
 	$(SHARED_FLAGS)\
+	-std=gnu17 \
 	-I$(LITEX_DIR)/soc/software/libbase \
 	-I$(LITEX_DIR)/soc/software/include
 
